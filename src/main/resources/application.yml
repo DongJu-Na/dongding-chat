@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: local
+    
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  devtools:
+    restart:
+      enabled: true
+server:
+  port : 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    restart:
+      enabled: false
+server:
+  port : 8081
