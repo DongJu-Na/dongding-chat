@@ -5,6 +5,11 @@ spring:
     prefix : classpath:templates/
     suffix : .html
     cache : false
+  rsocket:
+    server:
+      port: 7777
+      transport: websocket
+      mapping-path: /rs  
 logging:
     level:
       root: info
