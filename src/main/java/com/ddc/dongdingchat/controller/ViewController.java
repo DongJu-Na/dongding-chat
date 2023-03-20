@@ -16,15 +16,21 @@ public class ViewController {
 	}
 	
 	@GetMapping(value="/card")
-	public String prompt() {
+	public String card() {
 		log.debug("card Page access");
 		return "card";
 	}
 	
 	@GetMapping(value="/channel")
-	public String demo() {
+	public String channel() {
 		log.debug("channel Page access");
 		return "channel";
+	}
+	
+	@GetMapping(value="/")
+	public String chat() {
+		log.debug("chat Page access");
+		return "chat";
 	}
 	
 }
