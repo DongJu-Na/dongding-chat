@@ -10,6 +10,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Message {
-    String username;
-    String message;
+	private String username;
+	private String message;
+	private String sessionId;
+	
 }

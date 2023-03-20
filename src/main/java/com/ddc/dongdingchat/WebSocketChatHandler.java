@@ -1,22 +1,28 @@
 package com.ddc.dongdingchat;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketSession;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
 public class WebSocketChatHandler implements WebSocketHandler {
-    private final ConcurrentHashMap<String, Sinks.Many<String>> userMessageSinkMap = new ConcurrentHashMap<>();
+	 private final ConcurrentHashMap<String, Sinks.Many<String>> channelMessageSinkMap = new ConcurrentHashMap<>();
     
     public WebSocketChatHandler() {
 			log.info("WebSocketChatHandler load");
@@ -27,24 +33,51 @@ public class WebSocketChatHandler implements WebSocketHandler {
     	return Arrays.asList("test");
     }
 
-    @Override
+    @SuppressWarnings("serial")
+		@Override
     public Mono<Void> handle(WebSocketSession session) {
-        Sinks.Many<String> sink = Sinks.many().multicast().onBackpressureBuffer();
-        userMessageSinkMap.put(session.getId(), sink);
+        URI uri = session.getHandshakeInfo().getUri();
+        String[] segments = uri.getPath().split("/");
+        String channel = segments[segments.length - 1];
+
+        Sinks.Many<String> sink = channelMessageSinkMap.computeIfAbsent(channel, k -> Sinks.many().multicast().onBackpressureBuffer());
         
-        // 새로운 사용자가 입장하면, 다른 사용자들에게 입장 메시지를 전송
-        String enterMessage = String.format("%s 님이 입장하였습니다.", session.getId());
-        userMessageSinkMap.values().forEach(s -> s.tryEmitNext(enterMessage));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String enterMessage = "";
+        try {
+        	enterMessage = objectMapper.writeValueAsString(new HashMap<String, String>() {{
+					    put("user", "notice");
+					    put("text",  String.format("%s 님이 입장하였습니다.", session.getId()));
+					}});
+        	
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+        
+        sink.tryEmitNext(enterMessage);
 
         Mono<Void> input = session.receive()
-                .map(msg -> session.getId() + ": " + msg.getPayloadAsText())
-                .doOnNext(msg -> userMessageSinkMap.values().forEach(s -> s.tryEmitNext(msg)))
+                .map(msg -> {
+                	System.out.println(session.getId() + " " + msg.getPayloadAsText());
+                	return msg.getPayloadAsText();
+                })
+                .doOnNext(msg -> sink.tryEmitNext(msg))
                 .doOnTerminate(() -> {
-                	userMessageSinkMap.remove(session.getId());
-                	
-                	 // 새로운 사용자가 퇴장하면, 다른 사용자들에게 퇴장 메시지를 전송
-                  String leaveMessage = String.format("%s 님이 퇴장하였습니다.", session.getId());
-                  userMessageSinkMap.values().forEach(s -> s.tryEmitNext(leaveMessage));
+                    channelMessageSinkMap.remove(channel);
+                    
+                    String leaveMessage = "";
+                    
+                  	try {
+											leaveMessage = objectMapper.writeValueAsString(new HashMap<String, String>() {{
+											  put("user", "notice");
+											  put("text",  String.format("%s 님이 퇴장하였습니다.", session.getId()));
+											}});
+										} catch (JsonProcessingException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+                  	
+                    sink.tryEmitNext(leaveMessage);
                 })
                 .then();
 

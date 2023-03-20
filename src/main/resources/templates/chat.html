@@ -1,53 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Room</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const socket = new WebSocket('ws://' + location.host + '/chat');
-            const chatLog = document.getElementById('chat-log');
+    <link th:href="@{/css/chatRoom.css}" rel="stylesheet" />
+    <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function(){ 
+    	var wsUrl = "ws://localhost:8080/chat";
+        var socket = new WebSocket(wsUrl);
+        var chatLog = document.getElementById('chat-log');
 
-            socket.onopen = () => {
-                console.log('Connected');
-            };
+        socket.onopen = () => {
+            console.log('Connected');
+        };
 
-            socket.onclose = () => {
-                console.log('Disconnected');
-            };
+        socket.onclose = () => {
+            console.log('Disconnected');
+        };
 
-            socket.onerror = (error) => {
-                console.error('WebSocket Error:', error);
-            };
+        socket.onerror = (error) => {
+            console.error('WebSocket Error:', error);
+        };
 
-            socket.onmessage = (event) => {
-                chatLog.value += event.data + '\n';
-            };
+        socket.onmessage = (event) => {
+        	console.log(event.data);
+        	console.log(event);
+            const message = JSON.parse(event.data);
+            chatLog.innerHTML += '<li>' + message.user + ': ' + message.text + '</li>';
+        };
 
-            const sendMessage = () => {
-                const messageInput = document.getElementById('message-input');
-                const message = messageInput.value.trim();
-                if (message !== '') {
-                    socket.send(message);
-                    messageInput.value = '';
-                }
-            };
+        const sendMessage = () => {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                const username = "guest";
+                const data = {
+                    user: username,
+                    text: message
+                };
+                socket.send(JSON.stringify(data));
+                messageInput.value = '';
+            }
+        };
 
-            document.getElementById('send-button').addEventListener('click', sendMessage);
-            document.getElementById('message-input').addEventListener('keypress', (event) => {
-                if (event.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-        });
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('message-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });    	
+    });
     </script>
 </head>
 <body>
     <div style="width: 80%; margin: 0 auto;">
         <h1>Chat Room</h1>
-        <textarea id="chat-log" readonly style="width: 100%; height: 300px;"></textarea>
+        <ul id="chat-log"></ul>
         <div>
             <input id="message-input" type="text" placeholder="Type your message here..." style="width: 80%;">
             <button id="send-button" style="width: 19%;">Send</button>
