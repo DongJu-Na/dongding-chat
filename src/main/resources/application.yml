@@ -7,7 +7,9 @@ spring:
     cache : false
   webflux:
     websocket:
-      enabled: true  
+      enabled: true
+  config:
+    import: database.yml        
 logging:
     level:
       root: info

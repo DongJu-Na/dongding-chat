@@ -13,5 +13,7 @@ public class Message {
 	private String username;
 	private String message;
 	private String sessionId;
+	private String msgType;
+	
 	
 }
