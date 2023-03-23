@@ -1,4 +1,4 @@
-package com.ddc.dongdingchat;
+package com.ddc.dongdingchat.configuration;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -57,7 +57,7 @@ public class WebSocketChatHandler implements WebSocketHandler {
 
         Mono<Void> input = session.receive()
                 .map(msg -> {
-                	System.out.println(session.getId() + " " + msg.getPayloadAsText());
+                	log.debug(session.getId() + " " + msg.getPayloadAsText());
                 	return msg.getPayloadAsText();
                 })
                 .doOnNext(msg -> sink.tryEmitNext(msg))

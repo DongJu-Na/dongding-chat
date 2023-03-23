@@ -1,4 +1,4 @@
-package com.ddc.dongdingchat;
+package com.ddc.dongdingchat.configuration;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
