@@ -9,5 +9,5 @@ ${AnsiBackground.BLUE}| | |________.'  | | |   `.____.'   | | ||_____|\____| | |
 ${AnsiBackground.YELLOW}| |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | | |              | |
 ${AnsiBackground.GREEN}| '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' |
 ${AnsiBackground.MAGENTA} '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' 
-${AnsiBackground.DEFAULT}${application.title} ${application.version}
-${AnsiBackground.DEFAULT}Powered by Spring Boot ${spring-boot.version}
+${AnsiBackground.DEFAULT}${AnsiColor.MAGENTA}${application.title} ${application.version}
+${AnsiBackground.DEFAULT}${AnsiColor.MAGENTA}Powered by Spring Boot ${spring-boot.version}
