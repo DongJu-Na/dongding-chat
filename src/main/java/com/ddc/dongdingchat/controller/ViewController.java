@@ -8,19 +8,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class ViewController {
-	
+	@Deprecated
 	@GetMapping(value="/index")
 	public String index() {
     log.debug("index Page access");
 		return "index";
 	}
 	
+	@Deprecated
 	@GetMapping(value="/card")
 	public String card() {
 		log.debug("card Page access");
 		return "card";
 	}
 	
+	@Deprecated
 	@GetMapping(value="/channel")
 	public String channel() {
 		log.debug("channel Page access");
