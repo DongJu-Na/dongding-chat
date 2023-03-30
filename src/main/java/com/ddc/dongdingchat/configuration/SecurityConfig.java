@@ -45,9 +45,7 @@ public class SecurityConfig {
             .map(a -> context.getVariables().get("user").equals(a.getName()))
             .map(granted -> new AuthorizationDecision(granted));
   }
-
   
-
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		http
