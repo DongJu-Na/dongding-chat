@@ -46,11 +46,13 @@ public class SecurityConfig {
       return new MapReactiveUserDetailsService(user, admin);
   }
   
-  private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
-    return authentication
-            .map(a -> context.getVariables().get("user").equals(a.getName()))
-            .map(granted -> new AuthorizationDecision(granted));
-  }
+  private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication,
+      																AuthorizationContext context) {
+
+			return authentication
+								.map(a -> context.getVariables().get("user").equals(a.getName()))
+								.map(AuthorizationDecision::new);
+		}
   
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
