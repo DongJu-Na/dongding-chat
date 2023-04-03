@@ -62,4 +62,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # secret
-database.yml
+# database.yml
