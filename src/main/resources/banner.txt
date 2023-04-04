@@ -5,4 +5,4 @@ ${AnsiColor.YELLOW}\ `-' |' '-' '|  ||  |' '-' '\ `-' ||  ||  ||  |' '-' '\ `--.
 ${AnsiColor.GREEN}`---'  `---' `--''--'.`-  /  `---' `--'`--''--'.`-  /  `---'`--' `--' `--`--'  `--'   
 ${AnsiColor.BLUE}                      `---'                     `---'                                  
 ${AnsiColor.BRIGHT_RED}${application.title} ${application.version}
-${AnsiBackground.BRIGHT_CYAN}${AnsiColor.BRIGHT_RED}Powered by Spring Boot ${spring-boot.version}
+${AnsiColor.BRIGHT_RED}Powered by Spring Boot ${spring-boot.version}

@@ -18,12 +18,12 @@ public class H2ServerConfig {
 
   @EventListener(ContextRefreshedEvent.class)
   public void start() throws java.sql.SQLException {
-      log.info("started h2 console at port {}.", port);
+      log.info("H2 In-Memory Database 시작 사용 포트 > {}.", port);
       this.webServer = Server.createWebServer("-webPort", port.toString()).start();
   }
 
   @EventListener(ContextClosedEvent.class)
   public void stop() {
-      log.info("stopped h2 console at port {}.", port); this.webServer.stop();
+      log.info("H2 In-Memory Database 중지 사용 포트 > {}.", port); this.webServer.stop();
   }
 }

@@ -6,10 +6,11 @@ spring:
   r2dbc:                                            
     url: r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-    password:
+    password: 0822
 h2:       
   console:
     port: 8090
+        
 logging:
   level:
     org:
