@@ -26,4 +26,5 @@ public class H2ServerConfig {
   public void stop() {
       log.info("H2 In-Memory Database 중지 사용 포트 > {}.", port); this.webServer.stop();
   }
+ 
 }
