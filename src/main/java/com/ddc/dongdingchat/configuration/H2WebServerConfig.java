@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class H2ServerConfig {
+public class H2WebServerConfig {
   @Value("${h2.console.port}")
   private Integer port;
   private Server webServer;
